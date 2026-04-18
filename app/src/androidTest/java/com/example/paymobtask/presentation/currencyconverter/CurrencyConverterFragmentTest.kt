@@ -1,14 +1,14 @@
-package com.example.paymobtask.presentation
+package com.example.paymobtask.presentation.currencyconverter
 
 import android.widget.Spinner
-import androidx.test.espresso.Espresso.closeSoftKeyboard
+import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.example.paymobtask.MainActivity
 import com.example.paymobtask.R
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.kakaocup.kakao.screen.Screen.Companion.onScreen
+import io.github.kakaocup.kakao.screen.Screen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +30,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun initialState_showsLoadingThenContent() = run {
         step("Wait for currencies to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -38,7 +38,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Verify main UI elements are displayed") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 spinnerFrom.isVisible()
                 spinnerTo.isVisible()
                 etAmount.isVisible()
@@ -49,7 +49,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Verify amount defaults to 1") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 etAmount {
                     hasText("1")
                 }
@@ -57,7 +57,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Verify converted amount is not empty") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 5_000) {
                     etConvertedAmount.isVisible()
                 }
@@ -65,7 +65,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Error layout should be hidden") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 errorLayout.isGone()
                 progressBar.isGone()
             }
@@ -75,7 +75,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun typingAmount_updatesConvertedValue() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -83,7 +83,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Clear amount and type 100") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 5_000) {
                     etAmount {
                         clearText()
@@ -91,11 +91,11 @@ class CurrencyConverterFragmentTest : TestCase() {
                     }
                 }
             }
-            closeSoftKeyboard()
+            Espresso.closeSoftKeyboard()
         }
 
         step("Converted value should update") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 5_000) {
                     etConvertedAmount {
                         hasAnyText()
@@ -108,7 +108,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun emptyAmount_showsEmptyConvertedValue() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -116,16 +116,18 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Clear the amount field") {
-            onScreen<CurrencyConverterObjectScreen> {
-                etAmount {
-                    clearText()
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
+                flakySafely(timeoutMs = 10_000) {
+                    etAmount {
+                        clearText()
+                    }
                 }
             }
-            closeSoftKeyboard()
+            Espresso.closeSoftKeyboard()
         }
 
         step("Converted value should be empty") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 3_000) {
                     etConvertedAmount {
                         hasText("")
@@ -138,7 +140,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun swapButton_keepsScreenUsable() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -146,7 +148,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Click swap button") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     btnSwap {
                         click()
@@ -155,7 +157,7 @@ class CurrencyConverterFragmentTest : TestCase() {
             }
         }
         step("Main fields should still be visible after swap") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     spinnerFrom.isVisible()
                     spinnerTo.isVisible()
@@ -171,7 +173,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun selectingFromCurrency_triggersConversion() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -185,7 +187,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Converted field should still be visible") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 etConvertedAmount.isVisible()
             }
         }
@@ -194,7 +196,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun selectingToCurrency_triggersConversion() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -209,7 +211,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Converted field should still be visible") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 etConvertedAmount.isVisible()
             }
         }
@@ -219,7 +221,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun historyButton_navigatesToHistoryScreen() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -227,7 +229,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Click history button") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 btnHistory {
                     click()
                 }
@@ -235,7 +237,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Converter screen should disappear") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 3_000) {
                     contentGroup.doesNotExist()
                 }
@@ -246,7 +248,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun convertingProgress_hiddenWhenNotConverting() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -254,7 +256,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Progress should be hidden") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 convertingProgress.isGone()
             }
         }
@@ -263,7 +265,7 @@ class CurrencyConverterFragmentTest : TestCase() {
     @Test
     fun convertedAmountField_isNotEditable() = run {
         step("Wait for content to load") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 flakySafely(timeoutMs = 10_000) {
                     contentGroup.isVisible()
                 }
@@ -271,7 +273,7 @@ class CurrencyConverterFragmentTest : TestCase() {
         }
 
         step("Converted amount field should be disabled") {
-            onScreen<CurrencyConverterObjectScreen> {
+            Screen.Companion.onScreen<CurrencyConverterObjectScreen> {
                 etConvertedAmount.isDisabled()
             }
         }

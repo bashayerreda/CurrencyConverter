@@ -1,18 +1,15 @@
-package com.example.paymobtask.presentation
+package com.example.paymobtask.presentation.currencyconverter
 
 import com.example.paymobtask.R
-import com.example.paymobtask.presentation.currencyconverter.CurrencyConverterFragment
 import com.kaspersky.kaspresso.screens.KScreen
+import io.github.kakaocup.kakao.common.views.KView
 import io.github.kakaocup.kakao.edit.KEditText
 import io.github.kakaocup.kakao.progress.KProgressBar
-import io.github.kakaocup.kakao.common.views.KView
 import io.github.kakaocup.kakao.spinner.KSpinner
 import io.github.kakaocup.kakao.text.KButton
-import io.github.kakaocup.kakao.text.KTextView
 
 /**
- * Kaspresso Screen object for the Currency Converter Fragment.
- * Maps each UI element to a Kakao view wrapper for readable test DSL.
+ * Kaspresso Screen object for the Currency Converter Fragment
  */
 class CurrencyConverterObjectScreen : KScreen<CurrencyConverterObjectScreen>() {
 
